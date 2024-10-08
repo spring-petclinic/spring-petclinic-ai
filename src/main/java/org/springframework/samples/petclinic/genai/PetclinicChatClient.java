@@ -1,7 +1,5 @@
 package org.springframework.samples.petclinic.genai;
 
-import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.DEFAULT_CHAT_MEMORY_CONVERSATION_ID;
-
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -9,8 +7,9 @@ import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.DEFAULT_CHAT_MEMORY_CONVERSATION_ID;
 
 /**
  * This REST controller is being invoked by the in order to interact with the LLM
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Oded Shopen
  */
 @RestController
-@RequestMapping("/")
 @Profile("openai")
 public class PetclinicChatClient {
 
@@ -39,7 +37,7 @@ public class PetclinicChatClient {
 			      		you don't know the answer, then ask the user a followup question to try and clarify the question they are asking.
 			      		If you do know the answer, provide the answer but do not provide any additional followup questions.
 			      		When dealing with vets, if the user is unsure about the returned results, explain that there may be additional data that was not returned.
-			      		Only if the user is asking about the total number of all vets, answer that there are a lot and ask for some additional criteria. 
+			      		Only if the user is asking about the total number of all vets, answer that there are a lot and ask for some additional criteria.
 			      		For owners, pets or visits - provide the correct data.
 			      		""")
 				.defaultAdvisors(
@@ -50,7 +48,7 @@ public class PetclinicChatClient {
 				.build();
   }
 
-  @PostMapping("/chatclient")
+  @PostMapping("/chat")
   public String exchange(@RequestBody String query) {
 	  //All chatbot messages go through this endpoint and are passed to the LLM
 	  return
