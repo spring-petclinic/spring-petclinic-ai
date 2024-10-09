@@ -28,10 +28,11 @@ repositories {
 
 ext.webjarsFontawesomeVersion = "4.7.0"
 ext.webjarsBootstrapVersion = "5.3.3"
+ext.webjarsMarkedVersion = "14.1.2"
 ext.springAiVersion = "1.0.0-M2"
 
 dependencies {
-  implementation 'org.springframework.ai:spring-ai-azure-openai-spring-boot-starter'
+  implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
   implementation 'org.springframework.boot:spring-boot-starter-cache'
   implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
   implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -42,6 +43,7 @@ dependencies {
   runtimeOnly 'org.springframework.boot:spring-boot-starter-actuator'
   runtimeOnly "org.webjars.npm:bootstrap:${webjarsBootstrapVersion}"
   runtimeOnly "org.webjars.npm:font-awesome:${webjarsFontawesomeVersion}"
+  runtimeOnly "org.webjars.npm:marked:${webjarsMarkedVersion}"
   runtimeOnly 'com.github.ben-manes.caffeine:caffeine'
   runtimeOnly 'com.h2database:h2'
   runtimeOnly 'com.mysql:mysql-connector-j'

@@ -5,7 +5,6 @@ import org.springframework.ai.vectorstore.SimpleVectorStore;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
 /**
  * A Configuration class for beans used by the Chat Client.
@@ -13,7 +12,6 @@ import org.springframework.context.annotation.Profile;
  * @author Oded Shopen
  */
 @Configuration
-@Profile("openai")
 public class AIBeanConfiguration {
 
 	@Bean

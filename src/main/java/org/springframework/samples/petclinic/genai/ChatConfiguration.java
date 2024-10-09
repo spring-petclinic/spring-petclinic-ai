@@ -32,8 +32,10 @@ class ChatConfiguration {
 			.build();
 		// @formatter:on
 	}
+
 	@Bean
 	public ChatMemory chatMemory() {
 		return new InMemoryChatMemory();
 	}
+
 }

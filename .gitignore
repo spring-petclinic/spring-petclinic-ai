@@ -13,5 +13,4 @@ build/*
 .sts4-cache/
 .vscode
 _site/
-**/creds.yaml
 **/.DS_Store

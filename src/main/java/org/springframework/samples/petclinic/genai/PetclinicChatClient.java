@@ -1,7 +1,6 @@
 package org.springframework.samples.petclinic.genai;
 
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Oded Shopen
  */
 @RestController
-@Profile("openai")
 public class PetclinicChatClient {
 
 	// ChatModel is the primary interfaces for interacting with an LLM
@@ -21,22 +19,14 @@ public class PetclinicChatClient {
 	// checkout the interfaces in the core spring ai package.
 	private final ChatClient chatClient;
 
-    public PetclinicChatClient(ChatClient chatClient) {
-        this.chatClient = chatClient;
-    }
+	public PetclinicChatClient(ChatClient chatClient) {
+		this.chatClient = chatClient;
+	}
 
+	@PostMapping("/chat")
+	public String exchange(@RequestBody String query) {
+		// All chatbot messages go through this endpoint and are passed to the LLM
+		return this.chatClient.prompt().user(u -> u.text(query)).call().content();
+	}
 
-    @PostMapping("/chat")
-  public String exchange(@RequestBody String query) {
-	  //All chatbot messages go through this endpoint and are passed to the LLM
-	  return
-	  this.chatClient
-	  .prompt()
-      .user(
-          u ->
-              u.text(query)
-              )
-      .call()
-      .content();
-  }
 }

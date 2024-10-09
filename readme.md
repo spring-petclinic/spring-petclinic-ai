@@ -4,7 +4,40 @@
 
 ## Understanding the Spring Petclinic application with a few diagrams
 
-[See the presentation here](https://speakerdeck.com/michaelisvy/spring-petclinic-sample-application)
+Thanks to the work of Oded Shopen, a chatbot using **GenAI** has been added to the famous Spring Petclinic application.
+This fork uses the **[Spring AI project](https://spring.io/projects/spring-ai)**.
+It currently supports **OpenAI** or **Azure's OpenAI** as the **LLM provider**.
+
+Oded described his approach in those 2 blog posts: 
+* [AI Meets Spring Petclinic: Implementing an AI Assistant with Spring AI (Part I)](https://spring.io/blog/2024/09/26/ai-meets-spring-petclinic-implementing-an-ai-assistant-with-spring-ai-part-i)
+* [AI Meets Spring Petclinic: Implementing an AI Assistant with Spring AI (Part II)](https://spring.io/blog/2024/09/27/ai-meets-spring-petclinic-implementing-an-ai-assistant-with-spring-ai-part)
+
+* Spring Petclinic integrates a Chatbot that allows you to interact with the application in a natural language. Here are some examples of what you could ask:
+
+1. Please list the owners that come to the clinic.
+2. How many vets are there?
+3. Is there an owner named Betty?
+4. Which owners have dogs?
+5. Add a dog for Betty. Its name is Moopsie.
+
+![alt text](spring-ai.png)
+
+Spring Petclinic currently supports **OpenAI** or **Azure's OpenAI** as the LLM provider.
+In order to start `spring-petlinic-springai` perform the following steps:
+
+1. Decide which provider you want to use. By default, the `spring-ai-openai-spring-boot-starter` dependency is enabled. You can change it to `spring-ai-azure-openai-spring-boot-starter`in either`pom.xml` or in `build.gradle`, depending on your build tool of choice.
+2. Create an OpenAI API key or a Azure OpenAI resource in your Azure Portal. Refer to the [OpenAI's quickstart](https://platform.openai.com/docs/quickstart) or [Azure's documentation](https://learn.microsoft.com/en-us/azure/ai-services/openai/) for further information on how to obtain these. You only need to populate the provider you're using - either openai, or azure-openai.
+3. Export your API keys and endpoint as environment variables:
+   * either OpenAI:
+    ```bash
+    export OPENAI_API_KEY="your_api_key_here"
+    ```
+   * or OpenAI:
+    ```bash
+    export AZURE_OPENAI_ENDPOINT="https://your_resource.openai.azure.com"
+    export AZURE_OPENAI_KEY="your_api_key_here"
+    ```
+4. Follow the [next section Run Petclinic locally](#run-petclinic-locally)
 
 ## Run Petclinic locally
 
@@ -75,29 +108,6 @@ or
 ```bash
 docker-compose --profile postgres up
 ```
-## Integrating the Spring AI Chatbot
-
-Spring Petclinic integrates a Chatbot that allows you to interact with the application in a natural language. Here are some examples of what you could ask:
-
-1. Please list the owners that come to the clinic.
-2. How many vets are there?
-3. Is there an owner named Betty?
-4. Which owners have dogs?
-5. Add a dog for Betty. Its name is Moopsie.
-
-![alt text](spring-ai.png)
-
-By default, The Spring AI Chatbot is disabled and will return the message `Chat is currently unavailable. Please try again later.`.
-
-Spring Petclinic currently supports OpenAI or Azure's OpenAI as the LLM provider.
-In order to enable Spring AI, perform the following steps:
-
-1. Decide which provider you want to use. By default, the `spring-ai-azure-openai-spring-boot-starter` dependency is enabled. You can change it to `spring-ai-openai-spring-boot-starter`in either`pom.xml` or in `build.gradle`, depending on your build tool of choice.
-2. Copy `src/main/resources/creds-template.yaml` into `src/main/resources/creds.yaml`, and edit its contents with your API key and API endpoint. Refer to OpenAI's or Azure's documentation for further information on how to obtain these. You only need to populate the provider you're using - either openai, or azure-openai.
-3. Boot your application with the `openai` profile. This profile will work for both LLM providers. You can boot the application with that profile using any of the following:
-- For maven: `mvn -Dspring-boot.run.profiles=openai spring-boot:run`
-- For Gradle: `./gradlew bootRun --args='--spring.profiles.active=openai'` 
-- For a standard jar file: `SPRING_PROFILES_ACTIVE=openai java -jar build/libs/spring-petclinic-3.3.0.jar` or `SPRING_PROFILES_ACTIVE=openai java -jar target/spring-petclinic-3.3.0-SNAPSHOT.jar`.
 
 ## Test Applications
 

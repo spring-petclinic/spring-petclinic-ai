@@ -1,9 +1,7 @@
 package org.springframework.samples.petclinic.genai;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
@@ -12,7 +10,6 @@ import org.springframework.ai.reader.JsonReader;
 import org.springframework.ai.vectorstore.SimpleVectorStore;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
@@ -24,8 +21,9 @@ import org.springframework.samples.petclinic.vet.Vet;
 import org.springframework.samples.petclinic.vet.VetRepository;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Loads the veterinarians data into a vector store for the purpose of RAG functionality.
@@ -33,7 +31,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author Oded Shopen
  */
 @Component
-@Profile("openai")
 public class VectorStoreController {
 
 	private final Logger logger = LoggerFactory.getLogger(VectorStoreController.class);
@@ -42,7 +39,7 @@ public class VectorStoreController {
 
 	private final VetRepository vetRepository;
 
-	public VectorStoreController(VectorStore vectorStore, VetRepository vetRepository) throws IOException {
+	public VectorStoreController(VectorStore vectorStore, VetRepository vetRepository) {
 		this.vectorStore = vectorStore;
 		this.vetRepository = vetRepository;
 	}
@@ -54,11 +51,9 @@ public class VectorStoreController {
 		// Check if file exists
 		if (resource.exists()) {
 			// In order to save on AI credits, use a pre-embedded database that was saved
-			// to
-			// disk based on the current data in the h2 data.sql file
-			File file = resource.getFile();
-			((SimpleVectorStore) this.vectorStore).load(file);
-			logger.info("vector store loaded from existing vectorstore.json file in the classpath");
+			// to disk based on the current data in the h2 data.sql file
+			((SimpleVectorStore) this.vectorStore).load(resource);
+			logger.info("Vector store loaded from existing {} file in the classpath", resource.getFilename());
 			return;
 		}
 
@@ -97,7 +92,7 @@ public class VectorStoreController {
 			return new ByteArrayResource(jsonBytes);
 		}
 		catch (JsonProcessingException e) {
-			e.printStackTrace();
+			logger.error("Problems encountered when generating JSON from the vets list", e);
 			return null;
 		}
 	}
