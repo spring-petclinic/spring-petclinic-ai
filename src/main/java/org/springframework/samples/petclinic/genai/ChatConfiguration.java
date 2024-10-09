@@ -28,7 +28,7 @@ class ChatConfiguration {
 				new SimpleLoggerAdvisor()
 			)
 			.defaultSystem(systemResource)
-			//.defaultFunctions("queryOwners", "addPetToOwner")
+			.defaultFunctions("listOwners", "listVets", "addPetToOwner", "addOwnerToPetclinic")
 			.build();
 		// @formatter:on
 	}
