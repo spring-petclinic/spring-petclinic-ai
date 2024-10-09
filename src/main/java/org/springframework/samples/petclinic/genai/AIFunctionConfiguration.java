@@ -44,17 +44,24 @@ class AIFunctionConfiguration {
 	}
 
 	@Bean
-	@Description("Add a pet with the specified petTypeId, " + "to an owner identified by the ownerId. "
-			+ "The allowed Pet types IDs are only: " + "1 - cat" + "2 - dog" + "3 - lizard" + "4 - snake" + "5 - bird"
-			+ "6 - hamster")
+	@Description("""
+			Add a pet with the specified petTypeId, to an owner identified by the ownerId. \
+			The allowed Pet types IDs are only: \
+			1 - cat \
+			2 - dog \
+			3 - lizard \
+			4 - snake \
+			5 - bird \
+			6 - hamster""")
 	public Function<AddPetRequest, AddedPetResponse> addPetToOwner(AIDataProvider petclinicAiProvider) {
 		return petclinicAiProvider::addPetToOwner;
 	}
 
 	@Bean
-	@Description("Add a new pet owner to the pet clinic. "
-			+ "The Owner must include a first name and a last name as two separate words, "
-			+ "plus an address and a 10-digit phone number")
+	@Description("""
+			Add a new pet owner to the pet clinic. \
+			The Owner must include a first name and a last name as two separate words, \
+			plus an address and a 10-digit phone number""")
 	public Function<OwnerRequest, OwnerResponse> addOwnerToPetclinic(AIDataProvider petclinicAiDataProvider) {
 		return petclinicAiDataProvider::addOwnerToPetclinic;
 	}
