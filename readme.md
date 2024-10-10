@@ -2,7 +2,7 @@
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/spring-projects/spring-petclinic) [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=7517918)
 
-## Understanding the Spring Petclinic application with a few diagrams
+## Understanding the Spring Petclinic AI application
 
 Thanks to the work of Oded Shopen, a chatbot using **Generative AI** has been added to the famous Spring Petclinic application.
 This fork uses the **[Spring AI project](https://spring.io/projects/spring-ai)** and currently supports **OpenAI** or **Azure's OpenAI** as the **LLM provider**.
@@ -19,7 +19,7 @@ Spring Petclinic integrates a Chatbot that allows you to interact with the appli
 4. Which owners have dogs?
 5. Add a dog for Betty. Its name is Moopsie.
 
-![alt text](spring-ai.png)
+![Screenshot of the chat dialog](docs/chat-dialog.png)
 
 Spring Petclinic currently supports **OpenAI** or **Azure's OpenAI** as the LLM provider.
 In order to start `spring-petlinic-springai` perform the following steps:
@@ -51,7 +51,7 @@ java -jar target/*.jar
 
 You can then access the Petclinic at <http://localhost:8080/>.
 
-<img width="1042" alt="petclinic-screenshot" src="https://cloud.githubusercontent.com/assets/838318/19727082/2aee6d6c-9b8e-11e6-81fe-e889a5ddfded.png">
+![Screenshot of the Find Owners menu](docs/find-owners-screenshot.png)
 
 Or you can run it from Maven directly using the Spring Boot Maven plugin. If you do this, it will pick up changes that you make in the project immediately (changes to Java source files require a compile as well - most people use an IDE for this):
 
