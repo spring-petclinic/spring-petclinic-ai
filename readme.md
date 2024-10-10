@@ -4,7 +4,7 @@
 
 ## Understanding the Spring Petclinic application with a few diagrams
 
-Thanks to the work of Oded Shopen, a chatbot using **Generative AI** has been added to the famous Spring Petclinic application.
+Thanks to the work of [Oded Shopen](https://github.com/odedia), a chatbot using **Generative AI** has been added to the famous Spring Petclinic application.
 This fork uses the **[Spring AI project](https://spring.io/projects/spring-ai)** and currently supports **OpenAI** or **Azure's OpenAI** as the **LLM provider**.
 
 Oded described his approach in those 2 blog posts: 
