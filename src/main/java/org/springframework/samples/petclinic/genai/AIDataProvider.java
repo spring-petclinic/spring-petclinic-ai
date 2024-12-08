@@ -29,6 +29,7 @@ import org.springframework.samples.petclinic.owner.OwnerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Functions that are invoked by the LLM will use this bean to query the system of record
@@ -70,10 +71,11 @@ public class AIDataProvider {
 	}
 
 	public AddedPetResponse addPetToOwner(AddPetRequest request) {
-		Owner owner = ownerRepository.findById(request.ownerId());
-		owner.addPet(request.pet());
-		this.ownerRepository.save(owner);
-		return new AddedPetResponse(owner);
+		var ownerWithPet = ownerRepository.findById(request.ownerId()).map(existingOwner -> {
+			existingOwner.addPet(request.pet());
+			return ownerRepository.save(existingOwner);
+		}).orElse(null);
+		return new AddedPetResponse(ownerWithPet);
 	}
 
 	public OwnerResponse addOwnerToPetclinic(OwnerRequest ownerRequest) {
