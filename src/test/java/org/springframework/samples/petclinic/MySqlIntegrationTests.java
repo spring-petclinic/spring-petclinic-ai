@@ -46,7 +46,7 @@ class MySqlIntegrationTests {
 
 	@ServiceConnection
 	@Container
-	static MySQLContainer<?> container = new MySQLContainer<>("mysql:8.4");
+	static MySQLContainer<?> container = new MySQLContainer<>("mysql:9.1");
 
 	@LocalServerPort
 	int port;
@@ -58,7 +58,7 @@ class MySqlIntegrationTests {
 	private RestTemplateBuilder builder;
 
 	@Test
-	void testFindAll() throws Exception {
+	void testFindAll() {
 		vets.findAll();
 		vets.findAll(); // served from cache
 	}

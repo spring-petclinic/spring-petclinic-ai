@@ -17,6 +17,7 @@
 package org.springframework.samples.petclinic;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.Arrays;
@@ -48,7 +49,7 @@ import org.springframework.web.client.RestTemplate;
 import org.testcontainers.DockerClientFactory;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = { "spring.docker.compose.skip.in-tests=false", //
-		"spring.docker.compose.profiles.active=postgres" })
+		"spring.docker.compose.start.arguments=--force-recreate,--renew-anon-volumes,postgres" })
 @ActiveProfiles("postgres")
 @DisabledInNativeImage
 public class PostgresIntegrationTests {
@@ -71,7 +72,7 @@ public class PostgresIntegrationTests {
 		new SpringApplicationBuilder(PetClinicApplication.class) //
 			.profiles("postgres") //
 			.properties( //
-					"spring.docker.compose.profiles.active=postgres" //
+					"spring.docker.compose.start.arguments=postgres" //
 			) //
 			.listeners(new PropertiesLogger()) //
 			.run(args);
@@ -114,7 +115,16 @@ public class PostgresIntegrationTests {
 				Arrays.sort(names);
 				for (String name : names) {
 					String resolved = environment.getProperty(name);
-					String value = source.getProperty(name).toString();
+
+					assertNotNull(resolved, "resolved environment property: " + name + " is null.");
+
+					Object sourceProperty = source.getProperty(name);
+
+					assertNotNull(sourceProperty, "source property was expecting an object but is null.");
+
+					assertNotNull(sourceProperty.toString(), "source property toString() returned null.");
+
+					String value = sourceProperty.toString();
 					if (resolved.equals(value)) {
 						log.info(name + "=" + resolved);
 					}
