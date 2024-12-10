@@ -62,10 +62,6 @@ public class Vet extends Person {
 		return this.specialties;
 	}
 
-	protected void setSpecialtiesInternal(Set<Specialty> specialties) {
-		this.specialties = specialties;
-	}
-
 	@JsonProperty("specialties")
 	@JsonSerialize(as = ArrayList.class)
 	public List<Specialty> getSpecialties() {
