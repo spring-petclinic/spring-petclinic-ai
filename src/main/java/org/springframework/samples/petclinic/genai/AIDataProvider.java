@@ -26,16 +26,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.samples.petclinic.owner.Owner;
 import org.springframework.samples.petclinic.owner.OwnerRepository;
+import org.springframework.samples.petclinic.owner.Pet;
+import org.springframework.samples.petclinic.vet.Vet;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Functions that are invoked by the LLM will use this bean to query the system of record
  * for information such as listing owners and vets, or adding pets to an owner.
  *
  * @author Oded Shopen
+ * @author Antoine Rey
  */
 @Service
 public class AIDataProvider {
@@ -49,36 +51,34 @@ public class AIDataProvider {
 		this.vectorStore = vectorStore;
 	}
 
-	public OwnersResponse getAllOwners() {
+	public List<Owner> getAllOwners() {
 		Pageable pageable = PageRequest.of(0, 100);
 		Page<Owner> ownerPage = ownerRepository.findAll(pageable);
-		return new OwnersResponse(ownerPage.getContent());
+		return ownerPage.getContent();
 	}
 
-	public VetResponse getVets(VetRequest request) throws JsonProcessingException {
+	public List<String> getVets(Vet vet) throws JsonProcessingException {
 		ObjectMapper objectMapper = new ObjectMapper();
-		String vetAsJson = objectMapper.writeValueAsString(request.vet());
+		String vetAsJson = objectMapper.writeValueAsString(vet);
 
 		// Provide a limit of 50 results when zero parameters are sent
-		int topK = (request.vet() == null) ? 50 : 20;
+		int topK = (vet == null) ? 50 : 20;
 		SearchRequest sr = SearchRequest.builder().query(vetAsJson).topK(topK).build();
 
 		List<Document> topMatches = this.vectorStore.similaritySearch(sr);
-		List<String> results = topMatches.stream().map(Document::getText).toList();
-		return new VetResponse(results);
+		return topMatches.stream().map(Document::getText).toList();
 	}
 
-	public AddedPetResponse addPetToOwner(AddPetRequest request) {
-		var ownerWithPet = ownerRepository.findById(request.ownerId()).map(existingOwner -> {
-			existingOwner.addPet(request.pet());
+	public Owner addPetToOwner(int ownerId, Pet pet) {
+		pet.setId(null); // Non persistent Pet
+		return ownerRepository.findById(ownerId).map(existingOwner -> {
+			existingOwner.addPet(pet);
 			return ownerRepository.save(existingOwner);
 		}).orElse(null);
-		return new AddedPetResponse(ownerWithPet);
 	}
 
-	public OwnerResponse addOwnerToPetclinic(OwnerRequest ownerRequest) {
-		ownerRepository.save(ownerRequest.owner());
-		return new OwnerResponse(ownerRequest.owner());
+	public Owner addOwnerToPetclinic(Owner owner) {
+		return ownerRepository.save(owner);
 	}
 
 }
