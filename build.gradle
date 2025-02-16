@@ -32,7 +32,7 @@ ext.webjarsLocatorLiteVersion = "1.0.1"
 ext.webjarsFontawesomeVersion = "4.7.0"
 ext.webjarsBootstrapVersion = "5.3.3"
 ext.webjarsMarkedVersion = "14.1.2"
-ext.springAiVersion = "1.0.0-M5"
+ext.springAiVersion = "1.0.0-M6"
 
 dependencies {
   // Workaround for AOT issue (https://github.com/spring-projects/spring-framework/pull/33949) -->
