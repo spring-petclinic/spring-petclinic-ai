@@ -64,7 +64,7 @@ public class AIDataProvider {
 		SearchRequest sr = SearchRequest.builder().query(vetAsJson).topK(topK).build();
 
 		List<Document> topMatches = this.vectorStore.similaritySearch(sr);
-		List<String> results = topMatches.stream().map(Document::getContent).toList();
+		List<String> results = topMatches.stream().map(Document::getText).toList();
 		return new VetResponse(results);
 	}
 
