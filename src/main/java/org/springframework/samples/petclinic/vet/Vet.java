@@ -15,14 +15,10 @@
  */
 package org.springframework.samples.petclinic.vet;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.support.MutableSortDefinition;
-import org.springframework.beans.support.PropertyComparator;
+import org.springframework.samples.petclinic.model.NamedEntity;
 import org.springframework.samples.petclinic.model.Person;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -65,9 +61,9 @@ public class Vet extends Person {
 	@JsonProperty("specialties")
 	@JsonSerialize(as = ArrayList.class)
 	public List<Specialty> getSpecialties() {
-		List<Specialty> sortedSpecs = new ArrayList<>(getSpecialtiesInternal());
-		PropertyComparator.sort(sortedSpecs, new MutableSortDefinition("name", true, true));
-		return Collections.unmodifiableList(sortedSpecs);
+		return getSpecialtiesInternal().stream()
+			.sorted(Comparator.comparing(NamedEntity::getName))
+			.collect(Collectors.toList());
 	}
 
 	@JsonIgnore
