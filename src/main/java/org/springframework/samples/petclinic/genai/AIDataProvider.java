@@ -59,11 +59,9 @@ public class AIDataProvider {
 		ObjectMapper objectMapper = new ObjectMapper();
 		String vetAsJson = objectMapper.writeValueAsString(request.vet());
 
-		SearchRequest sr = SearchRequest.from(SearchRequest.defaults()).withQuery(vetAsJson).withTopK(20);
-		if (request.vet() == null) {
-			// Provide a limit of 50 results when zero parameters are sent
-			sr = sr.withTopK(50);
-		}
+		// Provide a limit of 50 results when zero parameters are sent
+		int topK = (request.vet() == null) ? 50 : 20;
+		SearchRequest sr = SearchRequest.builder().query(vetAsJson).topK(topK).build();
 
 		List<Document> topMatches = this.vectorStore.similaritySearch(sr);
 		List<String> results = topMatches.stream().map(Document::getContent).toList();

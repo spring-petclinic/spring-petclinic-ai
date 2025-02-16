@@ -15,7 +15,7 @@ apply plugin: 'io.spring.javaformat'
 gradle.startParameter.excludedTaskNames += [ "checkFormatAot", "checkFormatAotTest" ]
 
 group = 'org.springframework.samples'
-version = '3.4.0'
+version = '3.4.2'
 
 java {
   sourceCompatibility = JavaVersion.VERSION_17
@@ -32,7 +32,7 @@ ext.webjarsLocatorLiteVersion = "1.0.1"
 ext.webjarsFontawesomeVersion = "4.7.0"
 ext.webjarsBootstrapVersion = "5.3.3"
 ext.webjarsMarkedVersion = "14.1.2"
-ext.springAiVersion = "1.0.0-M2"
+ext.springAiVersion = "1.0.0-M5"
 
 dependencies {
   // Workaround for AOT issue (https://github.com/spring-projects/spring-framework/pull/33949) -->
