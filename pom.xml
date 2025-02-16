@@ -38,7 +38,7 @@
     <maven-checkstyle.version>3.6.0</maven-checkstyle.version>
     <nohttp-checkstyle.version>0.0.11</nohttp-checkstyle.version>
     <spring-format.version>0.0.43</spring-format.version>
-    <spring-ai.version>1.0.0-M3</spring-ai.version>
+    <spring-ai.version>1.0.0-M5</spring-ai.version>
   </properties>
 
   <dependencies>
