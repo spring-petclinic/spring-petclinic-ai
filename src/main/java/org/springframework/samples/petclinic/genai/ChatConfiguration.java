@@ -35,7 +35,7 @@ class ChatConfiguration {
 	private Resource systemResource;
 
 	@Bean
-	ChatClient chatClient(ChatClient.Builder chatClientBuilder, ChatMemory chatMemory) {
+	ChatClient chatClient(ChatClient.Builder chatClientBuilder, ChatMemory chatMemory, PetclinicTools petclinicTools) {
 		// @formatter:off
 		return chatClientBuilder
 			.defaultAdvisors(
@@ -44,7 +44,7 @@ class ChatConfiguration {
 				new SimpleLoggerAdvisor()
 			)
 			.defaultSystem(systemResource)
-			.defaultFunctions("listOwners", "listVets", "addPetToOwner", "addOwnerToPetclinic")
+			.defaultTools(petclinicTools)
 			.build();
 		// @formatter:on
 	}
