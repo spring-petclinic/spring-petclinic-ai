@@ -32,13 +32,14 @@ ext.webjarsLocatorLiteVersion = "1.0.1"
 ext.webjarsFontawesomeVersion = "4.7.0"
 ext.webjarsBootstrapVersion = "5.3.3"
 ext.webjarsMarkedVersion = "14.1.2"
-ext.springAiVersion = "1.0.0-M6"
+ext.springAiVersion = "1.0.0-M7"
 
 dependencies {
   // Workaround for AOT issue (https://github.com/spring-projects/spring-framework/pull/33949) -->
   implementation 'io.projectreactor:reactor-core'
 
-  implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
+  implementation 'org.springframework.ai:spring-ai-starter-model-openai'
+  implementation 'org.springframework.ai:spring-ai-vector-store'
   implementation 'org.springframework.boot:spring-boot-starter-cache'
   implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
   implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
