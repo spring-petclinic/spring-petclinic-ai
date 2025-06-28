@@ -14,8 +14,8 @@ Oded described his approach in those 2 blog posts:
 Spring Petclinic integrates a Chatbot that allows you to interact with the application in a natural language. Here are **some examples** of what you could ask:
 
 1. Please list the owners that come to the clinic.
-2. How many vets are there?
-3. Is there an owner named Betty?
+2. How many veterinary cardiologists are there?
+3. Is there an owner named Betty? What's her lastname?
 4. Which owners have dogs?
 5. Add a dog for Betty. Its name is Moopsie.
 
