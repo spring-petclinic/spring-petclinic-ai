@@ -39,7 +39,7 @@ import java.util.List;
 @Component
 class PetclinicTools {
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(PetclinicTools.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(PetclinicTools.class);
 
 	private final AIDataProvider petclinicAiProvider;
 
@@ -59,7 +59,7 @@ class PetclinicTools {
 		}
 		catch (JsonProcessingException e) {
 			LOGGER.error("Listing Veterinarians failed", e);
-			return null;
+			return List.of();
 		}
 	}
 

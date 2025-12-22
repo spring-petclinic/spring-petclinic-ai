@@ -18,6 +18,7 @@ package org.springframework.samples.petclinic.genai;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
@@ -75,9 +76,9 @@ public class VectorStoreController {
 
 		// If vectorstore.json is deleted, the data will be loaded on startup every time.
 		// Warning - this can be costly in terms of credits used with the AI provider.
-		// Fetches all Vet entites and creates a document per vet
+		// Fetches all Vet entities and creates a document per vet
 		Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
-		Page<Vet> vetsPage = vetRepository.findAll(pageable);
+		Page<@NonNull Vet> vetsPage = vetRepository.findAll(pageable);
 
 		Resource vetsAsJson = convertListToJsonResource(vetsPage.getContent());
 		DocumentReader reader = new JsonReader(vetsAsJson);

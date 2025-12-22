@@ -30,7 +30,7 @@ ext.webjarsLocatorLiteVersion = "1.1.2"
 ext.webjarsFontawesomeVersion = "4.7.0"
 ext.webjarsBootstrapVersion = "5.3.8"
 ext.webjarsMarkedVersion = "14.1.2"
-ext.springAiVersion = "1.0.1"
+ext.springAiVersion = "2.0.0-M1"
 
 dependencies {
   implementation 'org.springframework.ai:spring-ai-starter-model-openai'
