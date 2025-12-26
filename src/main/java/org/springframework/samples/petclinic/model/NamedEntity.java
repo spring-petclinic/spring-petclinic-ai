@@ -32,7 +32,7 @@ public class NamedEntity extends BaseEntity {
 
 	private static final long serialVersionUID = -1827620691768236760L;
 
-	@Column(name = "name")
+	@Column
 	@NotBlank
 	private String name;
 
@@ -46,7 +46,8 @@ public class NamedEntity extends BaseEntity {
 
 	@Override
 	public String toString() {
-		return this.getName();
+		String name = this.getName();
+		return (name != null) ? name : "<null>";
 	}
 
 }

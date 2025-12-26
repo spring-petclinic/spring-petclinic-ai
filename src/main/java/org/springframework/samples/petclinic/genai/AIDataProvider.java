@@ -18,6 +18,7 @@ package org.springframework.samples.petclinic.genai;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jspecify.annotations.NonNull;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
@@ -53,7 +54,7 @@ public class AIDataProvider {
 
 	public List<Owner> getAllOwners() {
 		Pageable pageable = PageRequest.of(0, 100);
-		Page<Owner> ownerPage = ownerRepository.findAll(pageable);
+		Page<@NonNull Owner> ownerPage = ownerRepository.findAll(pageable);
 		return ownerPage.getContent();
 	}
 
