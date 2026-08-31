@@ -19,24 +19,57 @@ Spring Petclinic integrates a Chatbot that allows you to interact with the appli
 4. Which owners have dogs?
 5. Add a dog for Betty. Its name is Moopsie.
 
-![Screenshot of the chat dialog](docs/chat-dialog.png)
+![Screenshot of the chat dialog](docs/ollama-chat.png)
 
-Spring Petclinic currently supports **OpenAI** or **Azure's OpenAI** as the LLM provider.
-In order to start `spring-petlinic-springai` perform the following steps:
+Spring Petclinic currently supports **OpenAI** or **Azure's OpenAI** or **Ollama** (partial support) as the LLM provider. OpenAI is the default. In order to start `spring-petclinic-ai` perform the following steps:
 
-1. Decide which provider you want to use. By default, the `spring-ai-openai-spring-boot-starter` dependency is enabled. You can change it to `spring-ai-azure-openai-spring-boot-starter`in either`pom.xml` or in `build.gradle`, depending on your build tool of choice.
-2. Create an OpenAI API key or a Azure OpenAI resource in your Azure Portal. Refer to the [OpenAI's quickstart](https://platform.openai.com/docs/quickstart) or [Azure's documentation](https://learn.microsoft.com/en-us/azure/ai-services/openai/) for further information on how to obtain these. You only need to populate the provider you're using - either openai, or azure-openai.
-3. Export your API keys and endpoint as environment variables:
-   * either OpenAI:
+### 1. Use the selected AI Spring Boot starter
+
+Spring Petclinic supports both `Maven` and `Gradle` build tools.
+
+#### Maven build
+
+Switching between LLM is done using **Maven profiles**. Three Maven profiles are provided: 
+1. `openai` (default)
+2. `azure-openai`
+3. `ollama`
+
+By default, thanks to the default `openai` profile, the `spring-ai-starter-model-openai` dependency is enabled.
+You can change it to spring-ai-starter-model-azure-openai` or `spring-ai-starter-model-ollama` by activating the corresponding profile.
+```shell
+./mvnw package -P ollama
+```
+`in either`pom.xml` or in `build.gradle`, depending on your build tool of choice.
+
+#### Gradle build
+
+Gradle users will need to comment or uncomment the appropriate `dev.langchain4j:spring-ai-starter-model-<llm>` dependency
+in the `build.gradle` file, depending on the LLM provider they want to use.
+
+
+### 2. Create an OpenAI API key or a Azure OpenAI resource in your Azure Portal. Refer to the [OpenAI's quickstart](https://platform.openai.com/docs/quickstart) or [Azure's documentation](https://learn.microsoft.com/en-us/azure/ai-services/openai/) or [Ollama](https://ollama.com/) for further information on how to obtain these. You only need to populate the provider you're using - either openai, azure-openai, or ollama.
+
+### 3. Export your API keys and endpoint as environment variables:
+   #### OpenAI
     ```bash
     export OPENAI_API_KEY="your_api_key_here"
     ```
-   * or OpenAI:
+#### Azure OpenAI
     ```bash
     export AZURE_OPENAI_ENDPOINT="https://your_resource.openai.azure.com"
     export AZURE_OPENAI_KEY="your_api_key_here"
     ```
-4. Follow the [next section Run Petclinic locally](#run-petclinic-locally)
+#### Ollama
+
+Download the Ollama client from the [Ollama website](https://ollama.com/).
+Run the `llama3.1` model:
+```shell
+ollama run llama3.1
+```
+By default, the Ollama REST API starts on `http://localhost:11434`. This URL is used in the `application.properties` file.
+
+      
+### 4. Follow the [next section Run Petclinic locally](#run-petclinic-locally)
 
 ## Run Petclinic locally
 
