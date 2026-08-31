@@ -35,7 +35,7 @@ Switching between LLM is done using **Maven profiles**. Three Maven profiles are
 3. `ollama`
 
 By default, thanks to the default `openai` profile, the `spring-ai-starter-model-openai` dependency is enabled.
-You can change it to spring-ai-starter-model-azure-openai` or `spring-ai-starter-model-ollama` by activating the corresponding profile.
+You can change it to spring-ai-starter-model-azure-openai` or `spring-ai-starter-model-ollama` by activating the corresponding profile. [![Java CI with Maven](https://github.com/spring-petclinic/spring-petclinic-ai/actions/workflows/maven-build.yml/badge.svg)](https://github.com/spring-petclinic/spring-petclinic-ai/actions/workflows/maven-build.yml)
 ```shell
 ./mvnw package -P ollama
 ```
@@ -44,8 +44,7 @@ You can change it to spring-ai-starter-model-azure-openai` or `spring-ai-starter
 #### Gradle build
 
 Gradle users will need to comment or uncomment the appropriate `dev.langchain4j:spring-ai-starter-model-<llm>` dependency
-in the `build.gradle` file, depending on the LLM provider they want to use.
-
+in the `build.gradle` file, depending on the LLM provider they want to use. [![Java CI with Gradle](https://github.com/spring-petclinic/spring-petclinic-ai/actions/workflows/gradle-build.yml/badge.svg)](https://github.com/spring-petclinic/spring-petclinic-ai/actions/workflows/gradle-build.yml)
 
 ### 2. Create an OpenAI API key or a Azure OpenAI resource in your Azure Portal. Refer to the [OpenAI's quickstart](https://platform.openai.com/docs/quickstart) or [Azure's documentation](https://learn.microsoft.com/en-us/azure/ai-services/openai/) or [Ollama](https://ollama.com/) for further information on how to obtain these. You only need to populate the provider you're using - either openai, azure-openai, or ollama.
 
