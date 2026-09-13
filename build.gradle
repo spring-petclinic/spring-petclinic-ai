@@ -34,6 +34,8 @@ ext.springAiVersion = "2.0.0-M1"
 
 dependencies {
   implementation 'org.springframework.ai:spring-ai-starter-model-openai'
+//  implementation 'org.springframework.ai:spring-ai-starter-model-azure-openai'
+//  implementation 'org.springframework.ai:spring-ai-starter-model-ollama'
   implementation 'org.springframework.ai:spring-ai-vector-store'
   implementation 'org.springframework.boot:spring-boot-starter-cache'
   implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
