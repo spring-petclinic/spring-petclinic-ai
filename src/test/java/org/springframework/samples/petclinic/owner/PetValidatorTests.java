@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(MockitoExtension.class)
 @DisabledInNativeImage
-public class PetValidatorTests {
+class PetValidatorTests {
 
 	private PetValidator petValidator;
 
@@ -63,7 +63,17 @@ public class PetValidatorTests {
 	}
 
 	@Test
-	void testValidate() {
+	void supportsPetClass() {
+		assertTrue(petValidator.supports(Pet.class));
+	}
+
+	@Test
+	void doesNotSupportNonPetClass() {
+		assertFalse(petValidator.supports(String.class));
+	}
+
+	@Test
+	void validate() {
 		petType.setName(petTypeName);
 		pet.setName(petName);
 		pet.setType(petType);
@@ -78,7 +88,7 @@ public class PetValidatorTests {
 	class ValidateHasErrors {
 
 		@Test
-		void testValidateWithInvalidPetName() {
+		void validateWithInvalidPetName() {
 			petType.setName(petTypeName);
 			pet.setName("");
 			pet.setType(petType);
@@ -90,7 +100,7 @@ public class PetValidatorTests {
 		}
 
 		@Test
-		void testValidateWithInvalidPetType() {
+		void validateWithInvalidPetType() {
 			pet.setName(petName);
 			pet.setType(null);
 			pet.setBirthDate(petBirthDate);
@@ -101,7 +111,7 @@ public class PetValidatorTests {
 		}
 
 		@Test
-		void testValidateWithInvalidBirthDate() {
+		void validateWithInvalidBirthDate() {
 			petType.setName(petTypeName);
 			pet.setName(petName);
 			pet.setType(petType);
@@ -110,6 +120,18 @@ public class PetValidatorTests {
 			petValidator.validate(pet, errors);
 
 			assertTrue(errors.hasFieldErrors("birthDate"));
+		}
+
+		@Test
+		void validateWithLongPetName() {
+			petType.setName(petTypeName);
+			pet.setName("A".repeat(31));
+			pet.setType(petType);
+			pet.setBirthDate(petBirthDate);
+
+			petValidator.validate(pet, errors);
+
+			assertTrue(errors.hasFieldErrors("name"));
 		}
 
 	}

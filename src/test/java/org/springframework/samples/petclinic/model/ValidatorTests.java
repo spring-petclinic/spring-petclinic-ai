@@ -40,10 +40,15 @@ class ValidatorTests {
 		return localValidatorFactoryBean;
 	}
 
+	private <T> ConstraintViolation<T> getOnlyViolation(Set<ConstraintViolation<T>> violations) {
+		assertThat(violations).hasSize(1);
+		return violations.iterator().next();
+	}
+
 	@Test
 	void shouldNotValidateWhenFirstNameEmpty() {
-
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
+
 		Person person = new Person();
 		person.setFirstName("");
 		person.setLastName("smith");
@@ -51,9 +56,24 @@ class ValidatorTests {
 		Validator validator = createValidator();
 		Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
 
-		assertThat(constraintViolations).hasSize(1);
-		ConstraintViolation<Person> violation = constraintViolations.iterator().next();
+		ConstraintViolation<Person> violation = getOnlyViolation(constraintViolations);
 		assertThat(violation.getPropertyPath()).hasToString("firstName");
+		assertThat(violation.getMessage()).isEqualTo("must not be blank");
+	}
+
+	@Test
+	void shouldNotValidateWhenLastNameEmpty() {
+		LocaleContextHolder.setLocale(Locale.ENGLISH);
+
+		Person person = new Person();
+		person.setFirstName("George");
+		person.setLastName("");
+
+		Validator validator = createValidator();
+		Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+
+		ConstraintViolation<Person> violation = getOnlyViolation(constraintViolations);
+		assertThat(violation.getPropertyPath()).hasToString("lastName");
 		assertThat(violation.getMessage()).isEqualTo("must not be blank");
 	}
 

@@ -47,7 +47,7 @@ class MySqlIntegrationTests {
 
 	@ServiceConnection
 	@Container
-	static MySQLContainer container = new MySQLContainer(DockerImageName.parse("mysql:9.5"));
+	static MySQLContainer container = new MySQLContainer(DockerImageName.parse("mysql:9.7"));
 
 	@LocalServerPort
 	int port;
@@ -59,14 +59,14 @@ class MySqlIntegrationTests {
 	private RestTemplateBuilder builder;
 
 	@Test
-	void testFindAll() {
+	void findAll() {
 		vets.findAll();
 		vets.findAll(); // served from cache
 	}
 
 	@Test
-	void testOwnerDetails() {
-		RestTemplate template = builder.rootUri("http://localhost:" + port).build();
+	void ownerDetails() {
+		RestTemplate template = builder.baseUri("http://localhost:" + port).build();
 		ResponseEntity<String> result = template.exchange(RequestEntity.get("/owners/1").build(), String.class);
 		assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}

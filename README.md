@@ -73,28 +73,31 @@ By default, the Ollama REST API starts on `http://localhost:11434`. This URL is 
 ## Run Petclinic locally
 
 Spring Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/) or [Gradle](https://spring.io/guides/gs/gradle/).
-Java 17 or later is required for the build, and the application can run with Java 17 or newer:
+Java 17 or later is required for the build, and the application can run with Java 17 or newer.
+
+You first need to clone the project locally:
 
 ```bash
 git clone https://github.com/spring-petclinic/spring-petclinic-ai.git
 cd spring-petclinic
-./mvnw package
-java -jar target/*.jar
 ```
+If you are using Maven, you can start the application on the command-line as follows:
 
-(On Windows, or if your shell doesn't expand the glob, you might need to specify the JAR file name explicitly on the command line at the end there.)
+```bash
+./mvnw spring-boot:run
+```
+With Gradle, the command is as follows:
+
+```bash
+./gradlew bootRun
+```
 
 You can then access the Petclinic at <http://localhost:8080/>.
 
 ![Screenshot of the Find Owners menu](docs/find-owners-screenshot.png)
 
-Or you can run it from Maven directly using the Spring Boot Maven plugin. If you do this, it will pick up changes that you make in the project immediately (changes to Java source files require a compile as well - most people use an IDE for this):
-
-```bash
-./mvnw spring-boot:run
-```
-
-> NOTE: If you prefer to use Gradle, you can build the app using `./gradlew build` and look for the jar file in `build/libs`.
+You can, of course, run Petclinic in your favorite IDE.
+See below for more details.
 
 ## Building a Container
 
@@ -102,6 +105,13 @@ There is no `Dockerfile` in this project. You can build a container image (if yo
 
 ```bash
 ./mvnw spring-boot:build-image
+```
+
+## Running the Container Image
+
+```bash
+docker images | grep petclinic
+docker run -p 8080:8080 docker.io/library/spring-petclinic:latest
 ```
 
 ## In case you find a bug/suggested improvement for Spring Petclinic
@@ -119,13 +129,13 @@ A similar setup is provided for MySQL and PostgreSQL if a persistent database co
 You can start MySQL or PostgreSQL locally with whatever installer works for your OS or use docker:
 
 ```bash
-docker run -e MYSQL_USER=petclinic -e MYSQL_PASSWORD=petclinic -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=petclinic -p 3306:3306 mysql:9.5
+docker run -e MYSQL_USER=petclinic -e MYSQL_PASSWORD=petclinic -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=petclinic -p 3306:3306 mysql:9.7
 ```
 
 or
 
 ```bash
-docker run -e POSTGRES_USER=petclinic -e POSTGRES_PASSWORD=petclinic -e POSTGRES_DB=petclinic -p 5432:5432 postgres:18.1
+docker run -e POSTGRES_USER=petclinic -e POSTGRES_PASSWORD=petclinic -e POSTGRES_DB=petclinic -p 5432:5432 postgres:18.4
 ```
 
 Further documentation is provided for [MySQL](https://github.com/spring-petclinic/spring-petclinic-ai/blob/main/src/main/resources/db/mysql/petclinic_db_setup_mysql.txt)
@@ -157,11 +167,11 @@ There is a `petclinic.css` in `src/main/resources/static/resources/css`. It was 
 
 The following items should be installed in your system:
 
-- Java 25 or newer (full JDK, not a JRE)
+- Java 17 or newer (full JDK, not a JRE)
 - [Git command line tool](https://help.github.com/articles/set-up-git)
 - Your preferred IDE
-  - Eclipse with the m2e plugin. Note: when m2e is available, there is an m2 icon in `Help -> About` dialog. If m2e is
-  not there, follow the install process [here](https://www.eclipse.org/m2e/)
+  - Eclipse with the m2e plugin. Note: when m2e is available, there is a m2 icon in `Help -> About` dialog. If m2e is
+  not there, follow the installation process [here](https://www.eclipse.org/m2e/)
   - [Spring Tools Suite](https://spring.io/tools) (STS)
   - [IntelliJ IDEA](https://www.jetbrains.com/idea/)
   - [VS Code](https://code.visualstudio.com)

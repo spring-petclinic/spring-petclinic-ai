@@ -31,6 +31,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -80,7 +82,7 @@ class VetControllerTests {
 	}
 
 	@Test
-	void testShowVetListHtml() throws Exception {
+	void showVetListHtml() throws Exception {
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/vets.html?page=1"))
 			.andExpect(status().isOk())
@@ -90,7 +92,16 @@ class VetControllerTests {
 	}
 
 	@Test
-	void testShowResourcesVetList() throws Exception {
+	void showVetListRedirectsOutOfBoundsPageToFirstPage() throws Exception {
+		for (int page : List.of(0, 2)) {
+			mockMvc.perform(get("/vets.html").param("page", Integer.toString(page)))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(redirectedUrl("/vets.html?page=1"));
+		}
+	}
+
+	@Test
+	void showResourcesVetList() throws Exception {
 		ResultActions actions = mockMvc.perform(get("/vets").accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk());
 		actions.andExpect(content().contentType(MediaType.APPLICATION_JSON))
