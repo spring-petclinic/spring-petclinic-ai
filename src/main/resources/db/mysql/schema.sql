@@ -43,7 +43,8 @@ CREATE TABLE IF NOT EXISTS pets (
   owner_id INT(4) UNSIGNED,
   INDEX(name),
   FOREIGN KEY (owner_id) REFERENCES owners(id),
-  FOREIGN KEY (type_id) REFERENCES types(id)
+  FOREIGN KEY (type_id) REFERENCES types(id),
+  UNIQUE (owner_id, name)
 ) engine=InnoDB;
 
 CREATE TABLE IF NOT EXISTS visits (

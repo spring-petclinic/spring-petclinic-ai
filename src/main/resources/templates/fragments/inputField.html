@@ -11,7 +11,7 @@
         <div class="col-sm-10">
           <div th:switch="${type}">
             <input th:case="'text'" class="form-control" type="text" th:field="*{__${name}__}" />
-            <input th:case="'date'" class="form-control" type="date" th:field="*{__${name}__}" />
+            <input th:case="'date'" class="form-control" type="date" th:field="*{__${name}__}" th:min="${minVisitDate}" />
           </div>
           <span th:if="${valid}" class="fa fa-ok form-control-feedback" aria-hidden="true"></span>
           <th:block th:if="${!valid}">

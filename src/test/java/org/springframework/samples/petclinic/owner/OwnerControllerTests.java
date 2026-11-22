@@ -44,6 +44,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -102,7 +104,7 @@ class OwnerControllerTests {
 	}
 
 	@Test
-	void testInitCreationForm() throws Exception {
+	void initCreationForm() throws Exception {
 		mockMvc.perform(get("/owners/new"))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeExists("owner"))
@@ -110,7 +112,7 @@ class OwnerControllerTests {
 	}
 
 	@Test
-	void testProcessCreationFormSuccess() throws Exception {
+	void processCreationFormSuccess() throws Exception {
 		mockMvc
 			.perform(post("/owners/new").param("firstName", "Joe")
 				.param("lastName", "Bloggs")
@@ -121,7 +123,7 @@ class OwnerControllerTests {
 	}
 
 	@Test
-	void testProcessCreationFormHasErrors() throws Exception {
+	void processCreationFormHasErrors() throws Exception {
 		mockMvc
 			.perform(post("/owners/new").param("firstName", "Joe").param("lastName", "Bloggs").param("city", "London"))
 			.andExpect(status().isOk())
@@ -132,7 +134,37 @@ class OwnerControllerTests {
 	}
 
 	@Test
-	void testInitFindForm() throws Exception {
+	void processCreationFormRejectsCityLongerThanColumn() throws Exception {
+		mockMvc
+			.perform(post("/owners/new").param("firstName", "Joe")
+				.param("lastName", "Bloggs")
+				.param("address", "123 Caramel Street")
+				.param("city", "C".repeat(81))
+				.param("telephone", "1316761638"))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeHasErrors("owner"))
+			.andExpect(model().attributeHasFieldErrors("owner", "city"))
+			.andExpect(model().attributeHasFieldErrorCode("owner", "city", "Size"))
+			.andExpect(view().name("owners/createOrUpdateOwnerForm"));
+	}
+
+	@Test
+	void processCreationFormRejectsAddressLongerThanColumn() throws Exception {
+		mockMvc
+			.perform(post("/owners/new").param("firstName", "Joe")
+				.param("lastName", "Bloggs")
+				.param("address", "A".repeat(256))
+				.param("city", "London")
+				.param("telephone", "1316761638"))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeHasErrors("owner"))
+			.andExpect(model().attributeHasFieldErrors("owner", "address"))
+			.andExpect(model().attributeHasFieldErrorCode("owner", "address", "Size"))
+			.andExpect(view().name("owners/createOrUpdateOwnerForm"));
+	}
+
+	@Test
+	void initFindForm() throws Exception {
 		mockMvc.perform(get("/owners/find"))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeExists("owner"))
@@ -140,14 +172,23 @@ class OwnerControllerTests {
 	}
 
 	@Test
-	void testProcessFindFormSuccess() throws Exception {
+	void processFindFormSuccess() throws Exception {
 		Page<Owner> tasks = new PageImpl<>(List.of(george(), new Owner()));
 		when(this.owners.findByLastNameStartingWith(anyString(), any(Pageable.class))).thenReturn(tasks);
 		mockMvc.perform(get("/owners?page=1")).andExpect(status().isOk()).andExpect(view().name("owners/ownersList"));
 	}
 
 	@Test
-	void testProcessFindFormByLastName() throws Exception {
+	void processFindFormRedirectsOutOfBoundsPageToFirstPage() throws Exception {
+		for (int page : List.of(0, 2)) {
+			mockMvc.perform(get("/owners").param("page", Integer.toString(page)).param("lastName", "Franklin"))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(redirectedUrl("/owners?page=1&lastName=Franklin"));
+		}
+	}
+
+	@Test
+	void processFindFormByLastName() throws Exception {
 		Page<Owner> tasks = new PageImpl<>(List.of(george()));
 		when(this.owners.findByLastNameStartingWith(eq("Franklin"), any(Pageable.class))).thenReturn(tasks);
 		mockMvc.perform(get("/owners?page=1").param("lastName", "Franklin"))
@@ -156,7 +197,33 @@ class OwnerControllerTests {
 	}
 
 	@Test
-	void testProcessFindFormNoOwnersFound() throws Exception {
+	void processFindFormIgnoresSurroundingWhitespace() throws Exception {
+		Page<Owner> tasks = new PageImpl<>(List.of(george()));
+		when(this.owners.findByLastNameStartingWith(eq("Franklin"), any(Pageable.class))).thenReturn(tasks);
+
+		for (String lastName : List.of(" Franklin", "Franklin ", " Franklin ")) {
+			mockMvc.perform(get("/owners?page=1").param("lastName", lastName))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/owners/" + TEST_OWNER_ID));
+		}
+
+		verify(this.owners, times(3)).findByLastNameStartingWith(eq("Franklin"), any(Pageable.class));
+	}
+
+	@Test
+	void processFindFormWithWhitespaceOnlyLastNameReturnsAllOwners() throws Exception {
+		Page<Owner> tasks = new PageImpl<>(List.of(george(), new Owner()));
+		when(this.owners.findByLastNameStartingWith(eq(""), any(Pageable.class))).thenReturn(tasks);
+
+		mockMvc.perform(get("/owners?page=1").param("lastName", "   "))
+			.andExpect(status().isOk())
+			.andExpect(view().name("owners/ownersList"));
+
+		verify(this.owners).findByLastNameStartingWith(eq(""), any(Pageable.class));
+	}
+
+	@Test
+	void processFindFormNoOwnersFound() throws Exception {
 		Page<Owner> tasks = new PageImpl<>(List.of());
 		when(this.owners.findByLastNameStartingWith(eq("Unknown Surname"), any(Pageable.class))).thenReturn(tasks);
 		mockMvc.perform(get("/owners?page=1").param("lastName", "Unknown Surname"))
@@ -168,7 +235,7 @@ class OwnerControllerTests {
 	}
 
 	@Test
-	void testInitUpdateOwnerForm() throws Exception {
+	void initUpdateOwnerForm() throws Exception {
 		mockMvc.perform(get("/owners/{ownerId}/edit", TEST_OWNER_ID))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeExists("owner"))
@@ -181,7 +248,7 @@ class OwnerControllerTests {
 	}
 
 	@Test
-	void testProcessUpdateOwnerFormSuccess() throws Exception {
+	void processUpdateOwnerFormSuccess() throws Exception {
 		mockMvc
 			.perform(post("/owners/{ownerId}/edit", TEST_OWNER_ID).param("firstName", "Joe")
 				.param("lastName", "Bloggs")
@@ -193,14 +260,14 @@ class OwnerControllerTests {
 	}
 
 	@Test
-	void testProcessUpdateOwnerFormUnchangedSuccess() throws Exception {
+	void processUpdateOwnerFormUnchangedSuccess() throws Exception {
 		mockMvc.perform(post("/owners/{ownerId}/edit", TEST_OWNER_ID))
 			.andExpect(status().is3xxRedirection())
 			.andExpect(view().name("redirect:/owners/{ownerId}"));
 	}
 
 	@Test
-	void testProcessUpdateOwnerFormHasErrors() throws Exception {
+	void processUpdateOwnerFormHasErrors() throws Exception {
 		mockMvc
 			.perform(post("/owners/{ownerId}/edit", TEST_OWNER_ID).param("firstName", "Joe")
 				.param("lastName", "Bloggs")
@@ -214,7 +281,7 @@ class OwnerControllerTests {
 	}
 
 	@Test
-	void testShowOwner() throws Exception {
+	void showOwner() throws Exception {
 		mockMvc.perform(get("/owners/{ownerId}", TEST_OWNER_ID))
 			.andExpect(status().isOk())
 			.andExpect(model().attribute("owner", hasProperty("lastName", is("Franklin"))))
@@ -229,7 +296,7 @@ class OwnerControllerTests {
 	}
 
 	@Test
-	public void testProcessUpdateOwnerFormWithIdMismatch() throws Exception {
+	void processUpdateOwnerFormWithIdMismatch() throws Exception {
 		int pathOwnerId = 1;
 
 		Owner owner = new Owner();
